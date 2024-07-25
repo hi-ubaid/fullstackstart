@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import { AuthContext } from '../helpers/AuthContext';
 
 function Login() {
   const [successMessage, setSuccessMessage] = useState('');
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+const {setAuthState} = useContext(AuthContext);
+
   const navigate                = useNavigate();
 
   const login = () => {
@@ -24,7 +28,8 @@ function Login() {
         else{
         setSuccessMessage("Logged In!");
         setTimeout(() => setSuccessMessage(''), 3000);
-        localStorage.setItem("accessToken", res.data)
+        localStorage.setItem("accessToken", res.data);
+        setAuthState(true);
         navigate("/");
         }
       })
