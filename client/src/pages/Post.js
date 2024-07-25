@@ -7,7 +7,7 @@ function Post() {
   const [postObject, setPostObject] = useState({});
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-
+  const [message, setMessage] = useState("");
   let { id } = useParams();
 
   useEffect(() => {
@@ -24,10 +24,21 @@ function Post() {
     Axios.post(`http://localhost:3010/Comments`, {
       commentBody: newComment,
       PostId: id
+    }, {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
     }).then((res) => {
-      const commentToAdd = { commentBody: newComment };
-      setComments([...comments, commentToAdd]);
-      setNewComment("");
+      if (res.data.error) {
+        setMessage(res.data.error);
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        const commentToAdd = { commentBody: newComment, username: "You" }; // Assuming the username is "You" for now
+        setComments([...comments, commentToAdd]);
+        setNewComment("");
+        setMessage("Comment Added");
+        setTimeout(() => setMessage(''), 3000);
+      }
     });
   };
 
@@ -49,10 +60,14 @@ function Post() {
           />
           <button onClick={addComment}>Post</button>
         </div>
+        {message && (
+          <div className="message">{message}</div>
+        )}
         <div className="comments-list">
           {comments.map((comment, key) => (
             <div key={key} className="comment">
-              {comment.commentBody}
+              <p className="comment-body">{comment.commentBody}</p>
+              <p className="comment-username">{comment.username}</p>
             </div>
           ))}
         </div>

@@ -20,7 +20,7 @@ function CreatePost() {
             .matches(/^[a-zA-Z ]*$/, "Only characters are allowed")
             .required("Title is required"),
         postText: Yup.string().required("Post cannot be empty"),
-        username: Yup.string().required("Username is required")
+        username: Yup.string().required("Username is required").min(3).max(15),
     });
 
     const onSubmit = (data, { resetForm }) => {
