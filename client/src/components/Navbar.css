@@ -18,6 +18,7 @@
 .navbar-links {
   display: flex;
   gap: 15px;
+  align-items: center; /* Ensure items are centered vertically */
 }
 
 .nav-link {
@@ -25,6 +26,9 @@
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.3s ease;
+  display: flex;
+  align-items: center; /* Center text within the flex item */
+  padding: 8px 16px; /* Add padding for consistent button styling */
 }
 
 .nav-link:hover {
@@ -33,6 +37,23 @@
 
 .nav-link.active {
   border-bottom: 2px solid #ffcc00;
+}
+
+button.nav-link {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px; /* Match the padding of the links */
+  font-size: 1rem;
+  color: white;
+}
+
+button.nav-link:hover {
+  color: #ffcc00;
+}
+
+button.nav-link:focus {
+  outline: none;
 }
 
 /* Add space between the navbar and the content */

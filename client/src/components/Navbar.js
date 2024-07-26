@@ -11,7 +11,20 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 
 function Navbar() {
-  const [authState, setAuthState] = useState(false);
+  const [authState, setAuthState] = useState({
+    username: "",
+    id:       "",
+    status:   false,
+  });
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    setAuthState({
+      username: "",
+      id:       "",
+      status:   false,
+    });
+  };
 
   useEffect(()=>{
     Axios.get("http://localhost:3010/auth/auth", {
@@ -21,9 +34,15 @@ function Navbar() {
     })
     .then((res)=>{
       if(res.data.error){
-        setAuthState(false);
+        setAuthState({
+          ...authState, status:false
+        });
       }else{
-        setAuthState(true);
+        setAuthState({
+          username: res.data.username,
+          id:       res.data.id,
+          status:   true,
+        });
       }
     })
     if(localStorage.getItem("accessToken")){
@@ -42,12 +61,19 @@ function Navbar() {
             <div className="navbar-links">
               <Link to="/" className="nav-link">Home</Link>
               <Link to="/createpost" className="nav-link">Create a Post</Link>
-              {!authState && (
+              {!authState.status ? (
                 <>
                 <Link to="/login" className="nav-link">Login</Link>
                 <Link to="/registration" className="nav-link">Registration</Link>
                 </>
-              )}
+              ) : (
+                <>
+                  <button className="nav-link" onClick={logout}>Logout</button>
+                </>
+              )
+              }
+
+              <h1>{authState.username}</h1>
             </div>
           </nav>
           <div className="routes-container">
